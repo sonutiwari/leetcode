@@ -3,11 +3,11 @@ const handleInput = (event) => {
     event.preventDefault();
     event.stopPropagation();
     const data = event.data;
-    if (!data) return;
-    if ('() -'.includes(data)) return;
     let value = event.target.value;
+    const { selectionStart, selectionEnd } = event.target;
     if (!value) return;
     value = value.replace(/\D/g, "")
+    
     if (!'1234567890'.includes(data)) {
         inputRef.value = value.substring(0, value.length - 1);
     }
@@ -22,6 +22,10 @@ const handleInput = (event) => {
         inputRef.value = `(${value.substring(0, 3)}) ${value.substring(3, length)}-`;
     } else {
         inputRef.value = `(${value.substring(0, 3)}) ${value.substring(3, 6)}-${value.substring(6, 10)}`
+    }
+    if (!data) {
+        inputRef.selectionStart = Math.min(selectionStart, value.length);
+        inputRef.selectionEnd = Math.min(selectionEnd, value.length);
     }
 }
 inputRef.addEventListener('input', handleInput);
